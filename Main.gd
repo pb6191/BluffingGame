@@ -37,6 +37,8 @@ var cardSelectedPos
 var cardSelectedVal
 var opponentDecision
 var opponentRaisingProbOutOf9
+var cardarray = ["res://PNG-cards/10_of_clubs.png", "res://PNG-cards/10_of_diamonds.png", "res://PNG-cards/10_of_hearts.png", "res://PNG-cards/10_of_spades.png", "res://PNG-cards/2_of_clubs.png", "res://PNG-cards/2_of_diamonds.png", "res://PNG-cards/2_of_hearts.png", "res://PNG-cards/2_of_spades.png", "res://PNG-cards/3_of_clubs.png", "res://PNG-cards/3_of_diamonds.png", "res://PNG-cards/3_of_hearts.png", "res://PNG-cards/3_of_spades.png", "res://PNG-cards/4_of_clubs.png", "res://PNG-cards/4_of_diamonds.png", "res://PNG-cards/4_of_hearts.png", "res://PNG-cards/4_of_spades.png", "res://PNG-cards/5_of_clubs.png", "res://PNG-cards/5_of_diamonds.png", "res://PNG-cards/5_of_hearts.png", "res://PNG-cards/5_of_spades.png", "res://PNG-cards/6_of_clubs.png", "res://PNG-cards/6_of_diamonds.png", "res://PNG-cards/6_of_hearts.png", "res://PNG-cards/6_of_spades.png", "res://PNG-cards/7_of_clubs.png", "res://PNG-cards/7_of_diamonds.png", "res://PNG-cards/7_of_hearts.png", "res://PNG-cards/7_of_spades.png", "res://PNG-cards/8_of_clubs.png", "res://PNG-cards/8_of_diamonds.png", "res://PNG-cards/8_of_hearts.png", "res://PNG-cards/8_of_spades.png", "res://PNG-cards/9_of_clubs.png", "res://PNG-cards/9_of_diamonds.png", "res://PNG-cards/9_of_hearts.png", "res://PNG-cards/9_of_spades.png", "res://PNG-cards/ace_of_clubs.png", "res://PNG-cards/ace_of_diamonds.png", "res://PNG-cards/ace_of_hearts.png", "res://PNG-cards/ace_of_spades.png", "res://PNG-cards/ace_of_spades2.png", "res://PNG-cards/black_joker.png", "res://PNG-cards/jack_of_clubs.png", "res://PNG-cards/jack_of_clubs2.png", "res://PNG-cards/jack_of_diamonds.png", "res://PNG-cards/jack_of_diamonds2.png", "res://PNG-cards/jack_of_hearts.png", "res://PNG-cards/jack_of_hearts2.png", "res://PNG-cards/jack_of_spades.png", "res://PNG-cards/jack_of_spades2.png", "res://PNG-cards/king_of_clubs.png", "res://PNG-cards/king_of_clubs2.png", "res://PNG-cards/king_of_diamonds.png", "res://PNG-cards/king_of_diamonds2.png", "res://PNG-cards/king_of_hearts.png", "res://PNG-cards/king_of_hearts2.png", "res://PNG-cards/king_of_spades.png", "res://PNG-cards/king_of_spades2.png", "res://PNG-cards/queen_of_clubs.png", "res://PNG-cards/queen_of_clubs2.png", "res://PNG-cards/queen_of_diamonds.png", "res://PNG-cards/queen_of_diamonds2.png", "res://PNG-cards/queen_of_hearts.png", "res://PNG-cards/queen_of_hearts2.png", "res://PNG-cards/queen_of_spades.png", "res://PNG-cards/queen_of_spades2.png", "res://PNG-cards/red_joker.png"]
+var carditem
 
 # change all the randomizers to use random num generator and randomize the seed before each use
 # change all the randomizers to use random num generator and randomize the seed before each use
@@ -53,16 +55,73 @@ func _ready():
 	$"TextInstr".text = "You have to place a bet to begin"
 	updateMoney(0.0)
 
+func setNonKing():
+	cardarray.shuffle()
+	carditem = cardarray[0]
+	while "king" in carditem or "ace" in carditem:
+		cardarray.shuffle()
+		carditem = cardarray[0]
+
+func setKing():
+	cardarray.shuffle()
+	carditem = cardarray[0]
+	while !("king" in carditem):
+		cardarray.shuffle()
+		carditem = cardarray[0]
+	var whichONE = [1, 2, 3, 4, 5]
+	whichONE.shuffle()
+	if whichONE[0] == 1:
+		$"C1".texture = load(carditem)
+	if whichONE[0] == 2:
+		$"C2".texture = load(carditem)
+	if whichONE[0] == 3:
+		$"C3".texture = load(carditem)
+	if whichONE[0] == 4:
+		$"C4".texture = load(carditem)
+	if whichONE[0] == 5:
+		$"C5".texture = load(carditem)
+
 func cardChoice():
 	rng2.randomize()
 	# 5/6th prob of getting a 2
 	var getZeroOne = rng2.randi_range(1,6)
 	if (getZeroOne) == 1:
 		cardSelectedVal = "ace"
-		$"Ace".visible = true
+		#$"Ace".visible = true
+		setNonKing()
+		$"C1".texture = load(carditem)
+		$"C1".visible = true
+		setNonKing()
+		$"C2".texture = load(carditem)
+		$"C2".visible = true
+		setNonKing()
+		$"C3".texture = load(carditem)
+		$"C3".visible = true
+		setNonKing()
+		$"C4".texture = load(carditem)
+		$"C4".visible = true
+		setNonKing()
+		$"C5".texture = load(carditem)
+		$"C5".visible = true
+		setKing()
 	else:
 		cardSelectedVal = "two"
-		$"TwoSpades".visible = true
+		#$"TwoSpades".visible = true
+		setNonKing()
+		$"C1".texture = load(carditem)
+		$"C1".visible = true
+		setNonKing()
+		$"C2".texture = load(carditem)
+		$"C2".visible = true
+		setNonKing()
+		$"C3".texture = load(carditem)
+		$"C3".visible = true
+		setNonKing()
+		$"C4".texture = load(carditem)
+		$"C4".visible = true
+		setNonKing()
+		$"C5".texture = load(carditem)
+		$"C5".visible = true
 	$"ButtonLeft".disabled = false
 	$"ButtonLeft".text = leftButtonText3b
 
@@ -102,8 +161,13 @@ func _on_ButtonLeft_pressed():
 		$"ButtonLeft".text = leftButtonText3b
 	if ($"ButtonLeft".text == leftButtonText3b and freshPress == true):
 		freshPress = false
-		$"Ace".visible = false
-		$"TwoSpades".visible = false
+		#$"Ace".visible = false
+		#$"TwoSpades".visible = false
+		$"C1".visible = false
+		$"C2".visible = false
+		$"C3".visible = false
+		$"C4".visible = false
+		$"C5".visible = false
 		$"ButtonRight".visible = true
 		$"LeftCardBack".visible = false
 		#$"TextInstr".text = "You picked up the card from the table and it is in your hands now and only you can see it. Now you have to decide whether to up your bet by raising more money or to fold and let your opponent win all the money on the table"
@@ -142,11 +206,23 @@ func _on_ButtonLeft_pressed():
 			#$"TextInstr".text = "You just placed you card on the table, face up and grabbed all the money off the table. Congrats, you got your bet and raise back and won your opponents first and subsequent bet money"
 			$"TextInstr".text = "Congrats, you won"
 			updateMoney(bet+raise+oppBet+oppRaise)
-			$"LeftAce".visible = true
+			#$"LeftAce".visible = true
+			#$"Ace".visible = true
+			$"C1".visible = true
+			$"C2".visible = true
+			$"C3".visible = true
+			$"C4".visible = true
+			$"C5".visible = true
 		else:
 			#$"TextInstr".text = "You just placed you card on the table, face up and your opponent grabbed all the money off the table. Sorry, your opponent won your bet and raise money and kept what they had bet"
 			$"TextInstr".text = "Sorry, you lost"
-			$"LeftTwoSpades".visible = true
+			#$"LeftTwoSpades".visible = true
+			#$"TwoSpades".visible = true
+			$"C1".visible = true
+			$"C2".visible = true
+			$"C3".visible = true
+			$"C4".visible = true
+			$"C5".visible = true
 		$"OppLeft10".visible = false
 		$"OppRight10".visible = false
 		$"PlayerLeft10".visible = false
@@ -155,8 +231,15 @@ func _on_ButtonLeft_pressed():
 	if ($"ButtonLeft".text == leftButtonText7 and freshPress == true):
 		freshPress = false
 		$"LeftCardBack".visible = true
-		$"LeftAce".visible = false
-		$"LeftTwoSpades".visible = false
+		#$"LeftAce".visible = false
+		#$"Ace".visible = false
+		#$"LeftTwoSpades".visible = false
+		#$"TwoSpades".visible = false
+		$"C1".visible = false
+		$"C2".visible = false
+		$"C3".visible = false
+		$"C4".visible = false
+		$"C5".visible = false
 		$"TextRound".text = "Round "+str(trialNum)
 		$"TextInstr".text = "Fresh round begins with a new card dealt on the table. Best of luck. You have to place a bet to begin"
 		$"ButtonLeft".text = leftButtonText1
@@ -228,11 +311,23 @@ func _on_ButtonRight_pressed():
 		if cardSelectedVal == "ace":
 			#$"TextInstr".text = "Seems like you just folded despite having an ace. Is that some kind of complex strategy?"
 			$"TextInstr".text = "You folded and showed your card to the opponent"
-			$"LeftAce".visible = true
+			#$"LeftAce".visible = true
+			#$"Ace".visible = true
+			$"C1".visible = true
+			$"C2".visible = true
+			$"C3".visible = true
+			$"C4".visible = true
+			$"C5".visible = true
 		else:
 			#$"TextInstr".text = "Seems like you just folded your 2 of spades. I guess we are not bluffing today, huh?"
 			$"TextInstr".text = "You folded and showed your card to the opponent"
-			$"LeftTwoSpades".visible = true
+			#$"LeftTwoSpades".visible = true
+			#$"TwoSpades".visible = true
+			$"C1".visible = true
+			$"C2".visible = true
+			$"C3".visible = true
+			$"C4".visible = true
+			$"C5".visible = true
 		endTrial()
 
 
