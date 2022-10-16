@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://rectangle-outline.png" type="Texture" id=2]
@@ -6,6 +6,13 @@
 [ext_resource path="res://SeekPng.com_playing-card-back-png_1215767.png" type="Texture" id=4]
 [ext_resource path="res://kindpng_825156.png" type="Texture" id=5]
 [ext_resource path="res://SeekPng.com_ace-of-spades-png_1789347.png" type="Texture" id=6]
+[ext_resource path="res://oppPic3.png" type="Texture" id=7]
+[ext_resource path="res://oppPic2.png" type="Texture" id=8]
+[ext_resource path="res://oppPic1.png" type="Texture" id=9]
+[ext_resource path="res://lose_img.png" type="Texture" id=10]
+[ext_resource path="res://win_img.png" type="Texture" id=11]
+[ext_resource path="res://mixkit-video-game-win-2016.ogg" type="AudioStream" id=12]
+[ext_resource path="res://mixkit-retro-arcade-lose-2027.ogg" type="AudioStream" id=13]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
@@ -41,10 +48,11 @@ __meta__ = {
 }
 
 [node name="TextOppMoney" type="RichTextLabel" parent="."]
-margin_right = 100.0
+margin_left = 100.0
+margin_right = 170.0
 margin_bottom = 60.0
 rect_scale = Vector2( 2, 2 )
-text = "Opponent's  money on the table:"
+text = "Opponent money on the table:"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -144,28 +152,28 @@ texture = ExtResource( 6 )
 
 [node name="C1" type="Sprite" parent="."]
 visible = false
-position = Vector2( 200, 200 )
-scale = Vector2( 0.75, 0.56 )
+position = Vector2( 100, 260 )
+scale = Vector2( 0.37, 0.28 )
 
 [node name="C2" type="Sprite" parent="."]
 visible = false
-position = Vector2( 300, 200 )
-scale = Vector2( 0.75, 0.56 )
+position = Vector2( 150, 260 )
+scale = Vector2( 0.37, 0.28 )
 
 [node name="C3" type="Sprite" parent="."]
 visible = false
-position = Vector2( 400, 200 )
-scale = Vector2( 0.75, 0.56 )
+position = Vector2( 200, 260 )
+scale = Vector2( 0.37, 0.28 )
 
 [node name="C4" type="Sprite" parent="."]
 visible = false
-position = Vector2( 500, 200 )
-scale = Vector2( 0.75, 0.56 )
+position = Vector2( 250, 260 )
+scale = Vector2( 0.37, 0.28 )
 
 [node name="C5" type="Sprite" parent="."]
 visible = false
-position = Vector2( 600, 200 )
-scale = Vector2( 0.75, 0.56 )
+position = Vector2( 300, 260 )
+scale = Vector2( 0.37, 0.28 )
 
 [node name="LeftAce" type="Sprite" parent="."]
 visible = false
@@ -196,6 +204,39 @@ visible = false
 position = Vector2( 928, 271.495 )
 scale = Vector2( 0.27778, 0.287602 )
 texture = ExtResource( 5 )
+
+[node name="OppPic1" type="Sprite" parent="."]
+visible = false
+position = Vector2( 50, 50 )
+texture = ExtResource( 9 )
+
+[node name="OppPic2" type="Sprite" parent="."]
+visible = false
+position = Vector2( 50, 50 )
+texture = ExtResource( 8 )
+
+[node name="OppPic3" type="Sprite" parent="."]
+visible = false
+position = Vector2( 50, 50 )
+texture = ExtResource( 7 )
+
+[node name="WINlogo" type="Sprite" parent="."]
+visible = false
+position = Vector2( 780, 400 )
+scale = Vector2( 0.4, 0.4 )
+texture = ExtResource( 11 )
+
+[node name="LOSElogo" type="Sprite" parent="."]
+visible = false
+position = Vector2( 780, 400 )
+scale = Vector2( 0.8, 0.8 )
+texture = ExtResource( 10 )
+
+[node name="WINPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 12 )
+
+[node name="LOSEPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 13 )
 [connection signal="button_down" from="ButtonLeft" to="." method="_on_ButtonLeft_button_down"]
 [connection signal="pressed" from="ButtonLeft" to="." method="_on_ButtonLeft_pressed"]
 [connection signal="button_down" from="ButtonRight" to="." method="_on_ButtonRight_button_down"]
