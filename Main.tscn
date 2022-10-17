@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://rectangle-outline.png" type="Texture" id=2]
@@ -13,6 +13,8 @@
 [ext_resource path="res://win_img.png" type="Texture" id=11]
 [ext_resource path="res://mixkit-video-game-win-2016.ogg" type="AudioStream" id=12]
 [ext_resource path="res://mixkit-retro-arcade-lose-2027.ogg" type="AudioStream" id=13]
+[ext_resource path="res://50_953353_1_1214-alexander-hamilton-10-bill_standard.png" type="Texture" id=14]
+[ext_resource path="res://30_953353_1_1214-alexander-hamilton-10-bill_standard.png" type="Texture" id=15]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
@@ -68,11 +70,20 @@ __meta__ = {
 }
 
 [node name="TextAmt" type="RichTextLabel" parent="."]
-visible = false
 margin_left = 760.0
 margin_top = 470.0
 margin_right = 890.0
 margin_bottom = 530.0
+rect_scale = Vector2( 2, 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextAmtOpp" type="RichTextLabel" parent="."]
+margin_left = 760.0
+margin_top = 50.0
+margin_right = 890.0
+margin_bottom = 110.0
 rect_scale = Vector2( 2, 2 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -87,16 +98,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PlayerMoneyHolder" type="Sprite" parent="."]
-position = Vector2( 500, 530 )
-scale = Vector2( 1, 0.5 )
-texture = ExtResource( 2 )
-
-[node name="OppMoneyHolder" type="Sprite" parent="."]
-position = Vector2( 500, 70 )
-scale = Vector2( 1, 0.5 )
-texture = ExtResource( 2 )
-
 [node name="PlayerLeft10" type="Sprite" parent="."]
 visible = false
 position = Vector2( 380, 530 )
@@ -107,19 +108,29 @@ texture = ExtResource( 3 )
 visible = false
 position = Vector2( 380, 70 )
 scale = Vector2( 0.25, 0.25 )
-texture = ExtResource( 3 )
+texture = ExtResource( 15 )
 
 [node name="PlayerRight10" type="Sprite" parent="."]
 visible = false
 position = Vector2( 620, 530 )
 scale = Vector2( 0.25, 0.25 )
-texture = ExtResource( 3 )
+texture = ExtResource( 14 )
 
 [node name="OppRight10" type="Sprite" parent="."]
 visible = false
 position = Vector2( 620, 70 )
 scale = Vector2( 0.25, 0.25 )
-texture = ExtResource( 3 )
+texture = ExtResource( 14 )
+
+[node name="PlayerMoneyHolder" type="Sprite" parent="."]
+position = Vector2( 500, 530 )
+scale = Vector2( 1, 0.5 )
+texture = ExtResource( 2 )
+
+[node name="OppMoneyHolder" type="Sprite" parent="."]
+position = Vector2( 500, 70 )
+scale = Vector2( 1, 0.5 )
+texture = ExtResource( 2 )
 
 [node name="RightCardBack" type="TextureRect" parent="."]
 visible = false
@@ -222,14 +233,14 @@ texture = ExtResource( 7 )
 
 [node name="WINlogo" type="Sprite" parent="."]
 visible = false
-position = Vector2( 780, 400 )
-scale = Vector2( 0.4, 0.4 )
+position = Vector2( 699.242, 342.602 )
+scale = Vector2( 0.238485, 0.268202 )
 texture = ExtResource( 11 )
 
 [node name="LOSElogo" type="Sprite" parent="."]
 visible = false
-position = Vector2( 780, 400 )
-scale = Vector2( 0.8, 0.8 )
+position = Vector2( 695.905, 359.955 )
+scale = Vector2( 0.470216, 0.557302 )
 texture = ExtResource( 10 )
 
 [node name="WINPlayer" type="AudioStreamPlayer" parent="."]

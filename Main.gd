@@ -13,10 +13,11 @@ var oppBet = 30.0
 var oppRaise = 50.0
 var bet = 10.0
 var raise = 50.0
-var money = 100.0
-var moneyStr = "Money you have in pocket: $"
+var money = 0.0
+var moneyStr = "Your total winnings: $"
+var moneyStrOpp = "Opponent total winnings: $"
 var trialNum = 1
-var totalTrials = 2
+var totalTrials = 3
 var freshPress = false
 var freshPressRight = false
 var leftButtonText1 = "Bet $10"
@@ -52,7 +53,7 @@ func _ready():
 	opponentRaisingProbOutOf9 = global.raiseProb[global.iter-1]
 	$"TextRound".text = "Round "+str(trialNum)
 	$"PlayerLeft10".visible = true
-	updateMoney(-bet)
+	updateMoney(0)
 	$"ButtonLeft".disabled = true
 	$"OppLeft10".visible = true
 	$"TextInstr".text = "You ante'd $"+str(bet)+". Your opponent ante'd $"+str(oppBet) + ". Now, you can see the card. Don't worry! Your opponent won't be able to see it"
@@ -143,6 +144,7 @@ func cardChoice():
 func updateMoney(amt):
 	money += amt
 	$"TextAmt".text = moneyStr + str(money)
+	$"TextAmtOpp".text = moneyStrOpp + str(-money)
 
 func endTrial():
 	trialNum += 1
@@ -159,7 +161,7 @@ func _on_ButtonLeft_pressed():
 	if ($"ButtonLeft".text == leftButtonText1 and freshPress == true):
 		freshPress = false
 		$"PlayerLeft10".visible = true
-		updateMoney(-bet)
+		updateMoney(0)
 		$"ButtonLeft".disabled = true
 		timeButton1stFreeze = 0.0
 		rng3.randomize()
@@ -197,7 +199,7 @@ func _on_ButtonLeft_pressed():
 		
 		$"PlayerRight10".visible = true
 		$"ButtonRight".visible = false
-		updateMoney(-raise)
+		updateMoney(0)
 		$"ButtonLeft".disabled = true
 		timeButton2ndFreeze = 0.0
 		rng4.randomize()
@@ -226,7 +228,7 @@ func _on_ButtonLeft_pressed():
 			$"TextInstr".text = "Congrats, you won $"+str(oppBet)+" ante and $"+str(oppRaise)+" raise from your opponent. You also keep your $"+str(bet)+" ante and your $"+str(raise)+" raise."
 			$"WINlogo".visible = true
 			$"WINPlayer".play()
-			updateMoney(bet+raise+oppBet+oppRaise)
+			updateMoney(oppBet+oppRaise)
 			#$"LeftAce".visible = true
 			#$"Ace".visible = true
 			$"C1".visible = true
@@ -239,6 +241,7 @@ func _on_ButtonLeft_pressed():
 			$"TextInstr".text = "Sorry, you lost your $"+str(bet)+" ante and your $"+str(raise)+" raise."
 			$"LOSElogo".visible = true
 			$"LOSEPlayer".play()
+			updateMoney(-bet-raise)
 			#$"LeftTwoSpades".visible = true
 			#$"TwoSpades".visible = true
 			$"C1".visible = true
@@ -266,7 +269,7 @@ func _on_ButtonLeft_pressed():
 		$"TextRound".text = "Round "+str(trialNum)
 		$"TextInstr".text = "Fresh round begins with a new card dealt on the table. You ante'd $"+str(bet)+". Your opponent ante'd $"+str(oppBet) + ". Now, you can see the card. Don't worry! Your opponent won't be able to see it"
 		$"PlayerLeft10".visible = true
-		updateMoney(-bet)
+		updateMoney(0)
 		$"ButtonLeft".disabled = true
 		$"OppLeft10".visible = true
 		$"WINlogo".visible = false
@@ -297,7 +300,7 @@ func _process(delta):
 					$"TextInstr".text = "Your opponent decided to increase their bet. You have to show your card now"
 				$"ButtonLeft".text = leftButtonText6
 			else:
-				updateMoney(bet+raise+oppBet)
+				updateMoney(oppBet)
 				$"OppLeft10".visible = false
 				$"PlayerLeft10".visible = false
 				$"PlayerRight10".visible = false
@@ -338,6 +341,7 @@ func _on_ButtonRight_pressed():
 		$"ButtonRight".visible = false
 		$"PlayerLeft10".visible = false
 		$"OppLeft10".visible = false
+		updateMoney(-bet)
 		if cardSelectedVal == "ace":
 			#$"TextInstr".text = "Seems like you just folded despite having an ace. Is that some kind of complex strategy?"
 			$"TextInstr".text = "You folded and showed your card to the opponent. You lost your $"+str(bet)+" ante."
