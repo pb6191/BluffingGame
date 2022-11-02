@@ -5,8 +5,15 @@ extends Node
 # var a = 2
 # var b = "text"
 
-var iter = 1
+var iter = 0 # 0 is training 1, 2, 3 are the three opponents
 var raiseProb = [5, 0, 9]
+var oppPicOrder = randi()%6+1 # a random number from 1 to 6
+# 1 is 123
+# 2 is 132
+# 3 is 213
+# 4 is 231
+# 5 is 312
+# 6 is 321
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

@@ -23,12 +23,12 @@ var freshPressRight = false
 var leftButtonText1 = "Bet $10"
 var leftButtonText2 = "Waiting for opponent to bet"
 var leftButtonText3 = "DEAL!"
-var leftButtonText3b = "Pick up the card from the table"
+var leftButtonText3b = "Pick up the cards from the table"
 var leftButtonText4 = "Do you want to raise $50?"
 var rightButtonText4 = "Do you want to fold?"
 var leftButtonText5 = "Waiting for opponent to raise or fold"
-var leftButtonText6 = "Show the card to the opponent"
-var leftButtonText7 = "Next round (Deal a new card on table)"
+var leftButtonText6 = "Show the cards to the opponent"
+var leftButtonText7 = "Next round (Deal new cards on table)"
 var leftButtonTextEnd = "Main Menu"
 var timeButton1stFreeze
 var timeButton1stFreezeMax
@@ -56,12 +56,12 @@ func _ready():
 	updateMoney(0)
 	$"ButtonLeft".disabled = true
 	$"OppLeft10".visible = true
-	$"TextInstr".text = "You ante'd $"+str(bet)+". Your opponent ante'd $"+str(oppBet) + ". Now, you can see the card. Don't worry! Your opponent won't be able to see it"
-	if global.iter == 1:
+	$"TextInstr".text = "You ante'd $"+str(bet)+". Your opponent ante'd $"+str(oppBet) + ". Now, you can see the cards. Don't worry! Your opponent won't be able to see it"
+	if (global.iter == 1 and (global.oppPicOrder == 1 or global.oppPicOrder == 2)) or (global.iter == 2 and (global.oppPicOrder == 3 or global.oppPicOrder == 5)) or (global.iter == 3 and (global.oppPicOrder == 4 or global.oppPicOrder == 6)):
 		$"OppPic1".visible = true
-	elif global.iter == 2:
+	elif (global.iter == 1 and (global.oppPicOrder == 3 or global.oppPicOrder == 4)) or (global.iter == 2 and (global.oppPicOrder == 1 or global.oppPicOrder == 6)) or (global.iter == 3 and (global.oppPicOrder == 2 or global.oppPicOrder == 5)):
 		$"OppPic2".visible = true
-	elif global.iter == 3:
+	elif (global.iter == 1 and (global.oppPicOrder == 5 or global.oppPicOrder == 6)) or (global.iter == 2 and (global.oppPicOrder == 2 or global.oppPicOrder == 4)) or (global.iter == 3 and (global.oppPicOrder == 1 or global.oppPicOrder == 3)):
 		$"OppPic3".visible = true
 	$"ButtonLeft".text = leftButtonText3
 
@@ -184,8 +184,10 @@ func _on_ButtonLeft_pressed():
 		$"C5".visible = false
 		$"ButtonRight".visible = true
 		$"LeftCardBack".visible = false
-		#$"TextInstr".text = "You picked up the card from the table and it is in your hands now and only you can see it. Now you have to decide whether to up your bet by raising more money or to fold and let your opponent win all the money on the table"
-		$"TextInstr".text = "You picked up the card from the table and only you can see it. Now you have to decide whether to up your bet by raising more money or to fold"
+		if global.iter == 0:
+			$"TextInstr".text = "You picked up the cards from the table and they are in your hands now and only you can see them. Now you have to decide whether to up your bet by raising more money or to fold and let your opponent win all the money on the table"
+		else:
+			$"TextInstr".text = "You picked up the cards from the table and only you can see it. Now you have to decide whether to up your bet by raising more money or to fold"
 		$"ButtonRight".text = rightButtonText4
 		$"ButtonLeft".text = leftButtonText4
 	if ($"ButtonLeft".text == leftButtonText4 and freshPress == true):
@@ -211,11 +213,15 @@ func _on_ButtonLeft_pressed():
 		else:
 			opponentDecision = "fold"
 		if cardSelectedVal == "ace":
-			#$"TextInstr".text = "You have chosen to up the ante by raising more money. Smart move, you have a King! Now, we are waiting for your opponent to fold or increase their bet"
-			$"TextInstr".text = "We are waiting for your opponent to fold or increase their bet"
+			if global.iter == 0:
+				$"TextInstr".text = "You have chosen to up the ante by raising more money. Smart move, you have a King! Now, we are waiting for your opponent to fold or increase their bet"
+			else:
+				$"TextInstr".text = "We are waiting for your opponent to fold or increase their bet"
 		else:
-			#$"TextInstr".text = "Aha! You have chosen to up the ante by raising more money and we are a go for the bluff. Now, we are waiting for your opponent to fold or increase their bet"
-			$"TextInstr".text = "We are waiting for your opponent to fold or increase their bet"
+			if global.iter == 0:
+				$"TextInstr".text = "Aha! You have chosen to up the ante by raising more money and we are a go for the bluff. Now, we are waiting for your opponent to fold or increase their bet"
+			else:
+				$"TextInstr".text = "We are waiting for your opponent to fold or increase their bet"
 		$"ButtonLeft".text = leftButtonText5
 	if ($"ButtonLeft".text == leftButtonText5 and freshPress == true):
 		freshPress = false
@@ -224,8 +230,10 @@ func _on_ButtonLeft_pressed():
 	if ($"ButtonLeft".text == leftButtonText6 and freshPress == true):
 		freshPress = false
 		if cardSelectedVal == "ace":
-			#$"TextInstr".text = "You just placed you card on the table, face up and grabbed all the money off the table. Congrats, you got your bet and raise back and won your opponents first and subsequent bet money"
-			$"TextInstr".text = "Congrats, you won $"+str(oppBet)+" ante and $"+str(oppRaise)+" raise from your opponent. You also keep your $"+str(bet)+" ante and your $"+str(raise)+" raise."
+			if global.iter == 0:
+				$"TextInstr".text = "You just placed your cards on the table, face up and grabbed all the money off the table. Congrats, you won $"+str(oppBet)+" ante and $"+str(oppRaise)+" raise from your opponent. You also keep your $"+str(bet)+" ante and your $"+str(raise)+" raise."
+			else:
+				$"TextInstr".text = "Congrats, you won $"+str(oppBet)+" ante and $"+str(oppRaise)+" raise from your opponent. You also keep your $"+str(bet)+" ante and your $"+str(raise)+" raise."
 			$"WINlogo".visible = true
 			$"WINPlayer".play()
 			updateMoney(oppBet+oppRaise)
@@ -237,8 +245,10 @@ func _on_ButtonLeft_pressed():
 			$"C4".visible = true
 			$"C5".visible = true
 		else:
-			#$"TextInstr".text = "You just placed you card on the table, face up and your opponent grabbed all the money off the table. Sorry, your opponent won your bet and raise money and kept what they had bet"
-			$"TextInstr".text = "Sorry, you lost your $"+str(bet)+" ante and your $"+str(raise)+" raise."
+			if global.iter == 0:
+				$"TextInstr".text = "You just placed you cards on the table, face up and your opponent grabbed all the money off the table. Sorry, you lost your $"+str(bet)+" ante and your $"+str(raise)+" raise."
+			else:
+				$"TextInstr".text = "Sorry, you lost your $"+str(bet)+" ante and your $"+str(raise)+" raise."
 			$"LOSElogo".visible = true
 			$"LOSEPlayer".play()
 			updateMoney(-bet-raise)
@@ -267,7 +277,7 @@ func _on_ButtonLeft_pressed():
 		$"C4".visible = false
 		$"C5".visible = false
 		$"TextRound".text = "Round "+str(trialNum)
-		$"TextInstr".text = "Fresh round begins with a new card dealt on the table. You ante'd $"+str(bet)+". Your opponent ante'd $"+str(oppBet) + ". Now, you can see the card. Don't worry! Your opponent won't be able to see it"
+		$"TextInstr".text = "Fresh round begins with new cards dealt on the table. You ante'd $"+str(bet)+". Your opponent ante'd $"+str(oppBet) + ". Now, you can see the cards. Don't worry! Your opponent won't be able to see it"
 		$"PlayerLeft10".visible = true
 		updateMoney(0)
 		$"ButtonLeft".disabled = true
@@ -283,7 +293,7 @@ func _process(delta):
 		timeButton1stFreeze += delta
 		if timeButton1stFreeze > timeButton1stFreezeMax:
 			$"OppLeft10".visible = true
-			$"TextInstr".text = "Your opponent has placed a bet of $"+str(oppBet) + ". Now, you can see the card. Don't worry! Your opponent won't be able to see it"
+			$"TextInstr".text = "Your opponent has placed a bet of $"+str(oppBet) + ". Now, you can see the cards. Don't worry! Your opponent won't be able to see it"
 			$"ButtonLeft".text = leftButtonText3
 	if $"ButtonLeft".text == leftButtonText5:
 		timeButton2ndFreeze += delta
@@ -293,11 +303,15 @@ func _process(delta):
 				$"ButtonLeft".disabled = false
 				$"ButtonRight".visible = false
 				if cardSelectedVal == "ace":
-					#$"TextInstr".text = "Your opponent decided to increase their bet. You will have to show your card now. But you have nothing to worry about since you had a King"
-					$"TextInstr".text = "Your opponent decided to increase their bet. You have to show your card now"
+					if global.iter == 0:
+						$"TextInstr".text = "Your opponent decided to increase their bet. You will have to show your cards now. But you have nothing to worry about since you have a King"
+					else:
+						$"TextInstr".text = "Your opponent decided to increase their bet. You have to show your cards now"
 				else:
-					#$"TextInstr".text = "Your opponent decided to increase their bet. You will have to show your 2 of spades card now. Sorry about that"
-					$"TextInstr".text = "Your opponent decided to increase their bet. You have to show your card now"
+					if global.iter == 0:
+						$"TextInstr".text = "Your opponent decided to increase their bet. You will have to show your losing hand now. Sorry about that"
+					else:
+						$"TextInstr".text = "Your opponent decided to increase their bet. You have to show your cards now"
 				$"ButtonLeft".text = leftButtonText6
 			else:
 				updateMoney(oppBet)
@@ -307,11 +321,15 @@ func _process(delta):
 				$"ButtonLeft".disabled = false
 				$"ButtonRight".visible = false
 				if cardSelectedVal == "ace":
-					#$"TextInstr".text = "Your opponent decided to fold. You will get your bet and raise back and you also win what your opponent had betted. You missed out on winning more bet money from your opponent though"
-					$"TextInstr".text = "Your opponent folded. You won $"+str(oppBet)+" from your opponent and you get back your $"+str(bet)+" ante and $"+str(raise)+" raise."
+					if global.iter == 0:
+						$"TextInstr".text = "Your opponent decided to fold. You won $"+str(oppBet)+" from your opponent and you get back your $"+str(bet)+" ante and $"+str(raise)+" raise. You missed out on winning more bet money from your opponent though"
+					else:
+						$"TextInstr".text = "Your opponent folded. You won $"+str(oppBet)+" from your opponent and you get back your $"+str(bet)+" ante and $"+str(raise)+" raise."
 				else:
-					#$"TextInstr".text = "Your opponent decided to fold. Haha! Looks like the bluff worked. You will get your bet and raise back and you also win what your opponent had betted"
-					$"TextInstr".text = "Your opponent folded. You won $"+str(oppBet)+" from your opponent and you get back your $"+str(bet)+" ante and $"+str(raise)+" raise."
+					if global.iter == 0:
+						$"TextInstr".text = "Your opponent decided to fold. Haha! Looks like the bluff worked. You won $"+str(oppBet)+" from your opponent and you get back your $"+str(bet)+" ante and $"+str(raise)+" raise."
+					else:
+						$"TextInstr".text = "Your opponent folded. You won $"+str(oppBet)+" from your opponent and you get back your $"+str(bet)+" ante and $"+str(raise)+" raise."
 				$"WINlogo".visible = true
 				$"WINPlayer".play()
 				endTrial()
@@ -323,7 +341,7 @@ func _on_ButtonLeft_button_down():
 func _on_LeftCardBack_gui_input(event):
 	if event.is_action("lftclk") and $"ButtonLeft".text == leftButtonText3:
 		cardSelectedPos = "left"
-		$"TextInstr".text = "You have seen the card. Don't worry! This is just a sneak peek, your opponent doesn't know what this card is. Now you have to decide whether to up your bet by raising more money or to fold"
+		$"TextInstr".text = "You have seen the cards. Don't worry! This is just a sneak peek, your opponent doesn't know what the cards are. Now you have to decide whether to up your bet by raising more money or to fold"
 		cardChoice()
 
 
@@ -343,8 +361,10 @@ func _on_ButtonRight_pressed():
 		$"OppLeft10".visible = false
 		updateMoney(-bet)
 		if cardSelectedVal == "ace":
-			#$"TextInstr".text = "Seems like you just folded despite having an ace. Is that some kind of complex strategy?"
-			$"TextInstr".text = "You folded and showed your card to the opponent. You lost your $"+str(bet)+" ante."
+			if global.iter == 0:
+				$"TextInstr".text = "Seems like you just folded despite having an ace. Is that some kind of complex strategy? You lost your $"+str(bet)+" ante."
+			else:
+				$"TextInstr".text = "You folded and showed your cards to the opponent. You lost your $"+str(bet)+" ante."
 			#$"LeftAce".visible = true
 			#$"Ace".visible = true
 			$"C1".visible = true
@@ -353,8 +373,10 @@ func _on_ButtonRight_pressed():
 			$"C4".visible = true
 			$"C5".visible = true
 		else:
-			#$"TextInstr".text = "Seems like you just folded your 2 of spades. I guess we are not bluffing today, huh?"
-			$"TextInstr".text = "You folded and showed your card to the opponent. You lost your $"+str(bet)+" ante."
+			if global.iter == 0:
+				$"TextInstr".text = "Seems like you just folded your losing hand. I guess we are not bluffing today, huh? You lost your $"+str(bet)+" ante."
+			else:
+				$"TextInstr".text = "You folded and showed your cards to the opponent. You lost your $"+str(bet)+" ante."
 			#$"LeftTwoSpades".visible = true
 			#$"TwoSpades".visible = true
 			$"C1".visible = true
