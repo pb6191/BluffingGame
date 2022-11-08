@@ -56,7 +56,7 @@ func _ready():
 	updateMoney(0)
 	$"ButtonLeft".disabled = true
 	$"OppLeft10".visible = true
-	$"TextInstr".text = "You ante'd $"+str(bet)+". Your opponent ante'd $"+str(oppBet) + ". Now, you can see the cards. Don't worry! Your opponent won't be able to see it"
+	$"TextInstr".text = "You ante'd $"+str(bet)+". Your opponent ante'd $"+str(oppBet) + ". Now, you can see the cards. Don't worry! Your opponent won't be able to see them"
 	if (global.iter == 1 and (global.oppPicOrder == 1 or global.oppPicOrder == 2)) or (global.iter == 2 and (global.oppPicOrder == 3 or global.oppPicOrder == 5)) or (global.iter == 3 and (global.oppPicOrder == 4 or global.oppPicOrder == 6)):
 		$"OppPic1".visible = true
 	elif (global.iter == 1 and (global.oppPicOrder == 3 or global.oppPicOrder == 4)) or (global.iter == 2 and (global.oppPicOrder == 1 or global.oppPicOrder == 6)) or (global.iter == 3 and (global.oppPicOrder == 2 or global.oppPicOrder == 5)):
@@ -187,7 +187,7 @@ func _on_ButtonLeft_pressed():
 		if global.iter == 0:
 			$"TextInstr".text = "You picked up the cards from the table and they are in your hands now and only you can see them. Now you have to decide whether to up your bet by raising more money or to fold and let your opponent win all the money on the table"
 		else:
-			$"TextInstr".text = "You picked up the cards from the table and only you can see it. Now you have to decide whether to up your bet by raising more money or to fold"
+			$"TextInstr".text = "You picked up the cards from the table and only you can see them. Now you have to decide whether to up your bet by raising more money or to fold"
 		$"ButtonRight".text = rightButtonText4
 		$"ButtonLeft".text = leftButtonText4
 	if ($"ButtonLeft".text == leftButtonText4 and freshPress == true):
@@ -277,7 +277,7 @@ func _on_ButtonLeft_pressed():
 		$"C4".visible = false
 		$"C5".visible = false
 		$"TextRound".text = "Round "+str(trialNum)
-		$"TextInstr".text = "Fresh round begins with new cards dealt on the table. You ante'd $"+str(bet)+". Your opponent ante'd $"+str(oppBet) + ". Now, you can see the cards. Don't worry! Your opponent won't be able to see it"
+		$"TextInstr".text = "Fresh round begins with new cards dealt on the table. You ante'd $"+str(bet)+". Your opponent ante'd $"+str(oppBet) + ". Now, you can see the cards. Don't worry! Your opponent won't be able to see them"
 		$"PlayerLeft10".visible = true
 		updateMoney(0)
 		$"ButtonLeft".disabled = true
@@ -293,7 +293,7 @@ func _process(delta):
 		timeButton1stFreeze += delta
 		if timeButton1stFreeze > timeButton1stFreezeMax:
 			$"OppLeft10".visible = true
-			$"TextInstr".text = "Your opponent has placed a bet of $"+str(oppBet) + ". Now, you can see the cards. Don't worry! Your opponent won't be able to see it"
+			$"TextInstr".text = "Your opponent has placed a bet of $"+str(oppBet) + ". Now, you can see the cards. Don't worry! Your opponent won't be able to see them"
 			$"ButtonLeft".text = leftButtonText3
 	if $"ButtonLeft".text == leftButtonText5:
 		timeButton2ndFreeze += delta
