@@ -81,9 +81,9 @@ __meta__ = {
 
 [node name="TextAmtOpp" type="RichTextLabel" parent="."]
 margin_left = 760.0
-margin_top = 50.0
+margin_top = 60.0
 margin_right = 890.0
-margin_bottom = 110.0
+margin_bottom = 120.0
 rect_scale = Vector2( 2, 2 )
 __meta__ = {
 "_edit_use_anchors_": false

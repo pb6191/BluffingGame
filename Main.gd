@@ -14,10 +14,10 @@ var oppRaise = 50.0
 var bet = 10.0
 var raise = 50.0
 var money = 0.0
-var moneyStr = "Your total winnings: $"
-var moneyStrOpp = "Opponent total winnings: $"
+var moneyStr = "You won from opponent: $"
+var moneyStrOpp = "Opponent won from you: $"
 var trialNum = 1
-var totalTrials = 3
+var totalTrials = 100
 var freshPress = false
 var freshPressRight = false
 var leftButtonText1 = "Bet $10"
@@ -50,10 +50,12 @@ var carditem
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if global.iter == 0:
+		totalTrials = 20
 	opponentRaisingProbOutOf9 = global.raiseProb[global.iter-1]
-	$"TextRound".text = "Round "+str(trialNum)
+	$"TextRound".text = "Opponent "+str(global.iter)+"/3 Round "+str(trialNum) + "/"+str(totalTrials)
 	$"PlayerLeft10".visible = true
-	updateMoney(0)
+	updateMoney(0.0)
 	$"ButtonLeft".disabled = true
 	$"OppLeft10".visible = true
 	$"TextInstr".text = "You ante'd $"+str(bet)+". Your opponent ante'd $"+str(oppBet) + ". Now, you can see the cards. Don't worry! Your opponent won't be able to see them"
@@ -142,9 +144,12 @@ func cardChoice():
 
 
 func updateMoney(amt):
-	money += amt
+	money = amt
 	$"TextAmt".text = moneyStr + str(money)
 	$"TextAmtOpp".text = moneyStrOpp + str(-money)
+	if global.iter == 1 and trialNum == 2 and amt != 0.0:
+		global.winnings = amt
+
 
 func endTrial():
 	trialNum += 1
@@ -161,7 +166,7 @@ func _on_ButtonLeft_pressed():
 	if ($"ButtonLeft".text == leftButtonText1 and freshPress == true):
 		freshPress = false
 		$"PlayerLeft10".visible = true
-		updateMoney(0)
+		updateMoney(0.0)
 		$"ButtonLeft".disabled = true
 		timeButton1stFreeze = 0.0
 		rng3.randomize()
@@ -185,9 +190,9 @@ func _on_ButtonLeft_pressed():
 		$"ButtonRight".visible = true
 		$"LeftCardBack".visible = false
 		if global.iter == 0:
-			$"TextInstr".text = "You picked up the cards from the table and they are in your hands now and only you can see them. Now you have to decide whether to up your bet by raising more money or to fold and let your opponent win all the money on the table"
+			$"TextInstr".text = "You picked up the cards from the table and they are in your hands now and only you can see them. Now you have to decide whether to raise your bet by raising more money or to fold and let your opponent win all the money on the table"
 		else:
-			$"TextInstr".text = "You picked up the cards from the table and only you can see them. Now you have to decide whether to up your bet by raising more money or to fold"
+			$"TextInstr".text = "You picked up the cards from the table and only you can see them. Now you have to decide whether to raise your bet by raising more money or to fold"
 		$"ButtonRight".text = rightButtonText4
 		$"ButtonLeft".text = leftButtonText4
 	if ($"ButtonLeft".text == leftButtonText4 and freshPress == true):
@@ -201,7 +206,7 @@ func _on_ButtonLeft_pressed():
 		
 		$"PlayerRight10".visible = true
 		$"ButtonRight".visible = false
-		updateMoney(0)
+		updateMoney(0.0)
 		$"ButtonLeft".disabled = true
 		timeButton2ndFreeze = 0.0
 		rng4.randomize()
@@ -276,10 +281,10 @@ func _on_ButtonLeft_pressed():
 		$"C3".visible = false
 		$"C4".visible = false
 		$"C5".visible = false
-		$"TextRound".text = "Round "+str(trialNum)
+		$"TextRound".text = "Opponent "+str(global.iter)+"/3 Round "+str(trialNum) + "/"+str(totalTrials)
 		$"TextInstr".text = "Fresh round begins with new cards dealt on the table. You ante'd $"+str(bet)+". Your opponent ante'd $"+str(oppBet) + ". Now, you can see the cards. Don't worry! Your opponent won't be able to see them"
 		$"PlayerLeft10".visible = true
-		updateMoney(0)
+		updateMoney(0.0)
 		$"ButtonLeft".disabled = true
 		$"OppLeft10".visible = true
 		$"WINlogo".visible = false
@@ -341,7 +346,7 @@ func _on_ButtonLeft_button_down():
 func _on_LeftCardBack_gui_input(event):
 	if event.is_action("lftclk") and $"ButtonLeft".text == leftButtonText3:
 		cardSelectedPos = "left"
-		$"TextInstr".text = "You have seen the cards. Don't worry! This is just a sneak peek, your opponent doesn't know what the cards are. Now you have to decide whether to up your bet by raising more money or to fold"
+		$"TextInstr".text = "You have seen the cards. Don't worry! This is just a sneak peek, your opponent doesn't know what the cards are. Now you have to decide whether to raise your bet by raising more money or to fold"
 		cardChoice()
 
 
