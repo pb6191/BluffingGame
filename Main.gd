@@ -41,6 +41,12 @@ var opponentRaisingProbOutOf9
 var cardarray = ["res://PNG-cards/10_of_clubs.png", "res://PNG-cards/10_of_diamonds.png", "res://PNG-cards/10_of_hearts.png", "res://PNG-cards/10_of_spades.png", "res://PNG-cards/2_of_clubs.png", "res://PNG-cards/2_of_diamonds.png", "res://PNG-cards/2_of_hearts.png", "res://PNG-cards/2_of_spades.png", "res://PNG-cards/3_of_clubs.png", "res://PNG-cards/3_of_diamonds.png", "res://PNG-cards/3_of_hearts.png", "res://PNG-cards/3_of_spades.png", "res://PNG-cards/4_of_clubs.png", "res://PNG-cards/4_of_diamonds.png", "res://PNG-cards/4_of_hearts.png", "res://PNG-cards/4_of_spades.png", "res://PNG-cards/5_of_clubs.png", "res://PNG-cards/5_of_diamonds.png", "res://PNG-cards/5_of_hearts.png", "res://PNG-cards/5_of_spades.png", "res://PNG-cards/6_of_clubs.png", "res://PNG-cards/6_of_diamonds.png", "res://PNG-cards/6_of_hearts.png", "res://PNG-cards/6_of_spades.png", "res://PNG-cards/7_of_clubs.png", "res://PNG-cards/7_of_diamonds.png", "res://PNG-cards/7_of_hearts.png", "res://PNG-cards/7_of_spades.png", "res://PNG-cards/8_of_clubs.png", "res://PNG-cards/8_of_diamonds.png", "res://PNG-cards/8_of_hearts.png", "res://PNG-cards/8_of_spades.png", "res://PNG-cards/9_of_clubs.png", "res://PNG-cards/9_of_diamonds.png", "res://PNG-cards/9_of_hearts.png", "res://PNG-cards/9_of_spades.png", "res://PNG-cards/ace_of_clubs.png", "res://PNG-cards/ace_of_diamonds.png", "res://PNG-cards/ace_of_hearts.png", "res://PNG-cards/ace_of_spades.png", "res://PNG-cards/ace_of_spades2.png", "res://PNG-cards/black_joker.png", "res://PNG-cards/jack_of_clubs.png", "res://PNG-cards/jack_of_clubs2.png", "res://PNG-cards/jack_of_diamonds.png", "res://PNG-cards/jack_of_diamonds2.png", "res://PNG-cards/jack_of_hearts.png", "res://PNG-cards/jack_of_hearts2.png", "res://PNG-cards/jack_of_spades.png", "res://PNG-cards/jack_of_spades2.png", "res://PNG-cards/king_of_clubs.png", "res://PNG-cards/king_of_clubs2.png", "res://PNG-cards/king_of_diamonds.png", "res://PNG-cards/king_of_diamonds2.png", "res://PNG-cards/king_of_hearts.png", "res://PNG-cards/king_of_hearts2.png", "res://PNG-cards/king_of_spades.png", "res://PNG-cards/king_of_spades2.png", "res://PNG-cards/queen_of_clubs.png", "res://PNG-cards/queen_of_clubs2.png", "res://PNG-cards/queen_of_diamonds.png", "res://PNG-cards/queen_of_diamonds2.png", "res://PNG-cards/queen_of_hearts.png", "res://PNG-cards/queen_of_hearts2.png", "res://PNG-cards/queen_of_spades.png", "res://PNG-cards/queen_of_spades2.png", "res://PNG-cards/red_joker.png"]
 var carditem
 
+var saveOutput = []
+var timeElapsedSinceGameStart = 0
+var timeElapsedSinceLastLog = 0
+var http_client
+var dataString = {"filename": "", "filedata":""}
+
 # change all the randomizers to use random num generator and randomize the seed before each use
 # change all the randomizers to use random num generator and randomize the seed before each use
 # change all the randomizers to use random num generator and randomize the seed before each use
@@ -66,6 +72,22 @@ func _ready():
 	elif (global.iter == 1 and (global.oppPicOrder == 5 or global.oppPicOrder == 6)) or (global.iter == 2 and (global.oppPicOrder == 2 or global.oppPicOrder == 4)) or (global.iter == 3 and (global.oppPicOrder == 1 or global.oppPicOrder == 3)):
 		$"OppPic3".visible = true
 	$"ButtonLeft".text = leftButtonText3
+	saveOutput.append("timeStamp,numOpponent,numTrial,timeElapsedSinceGameStart,timeElapsedSinceLastLog,king,winnings")
+	timeElapsedSinceLastLog = 0
+	http_client = HTTPClient.new()
+
+func _make_post_request(url, data_to_send):
+	var query = JSON.print(data_to_send)
+	#var query = data_to_send
+	var headers = ["Content-Type: application/json"]
+	#http_client.connect_to_host("192.168.0.101", 8081)
+	http_client.connect_to_host("https://maloneylabexperiments.hosting.nyu.edu")
+	while(http_client.get_status() != 5):
+		http_client.poll()
+	http_client.poll()
+	http_client.request(HTTPClient.METHOD_POST, url, headers, query)
+	http_client.close()
+
 
 
 func setNonKing():
@@ -152,6 +174,13 @@ func updateMoney(amt):
 
 
 func endTrial():
+	var time2 = OS.get_time()
+	var time_return2 = String(time2.hour) +":"+String(time2.minute)+":"+String(time2.second)
+	if cardSelectedVal == "ace":
+		saveOutput.append(time_return2+","+str(global.iter)+","+str(trialNum)+ "," + str(timeElapsedSinceGameStart) + "," + str(timeElapsedSinceLastLog) + ",yes," + str(money))
+	else:
+		saveOutput.append(time_return2+","+str(global.iter)+","+str(trialNum)+ "," + str(timeElapsedSinceGameStart) + "," + str(timeElapsedSinceLastLog) + ",no," + str(money))
+	timeElapsedSinceLastLog = 0
 	trialNum += 1
 	if trialNum == totalTrials+1:
 		$"ButtonLeft".text = leftButtonTextEnd
@@ -160,6 +189,11 @@ func endTrial():
 
 func _on_ButtonLeft_pressed():
 	if ($"ButtonLeft".text == leftButtonTextEnd and freshPress == true):
+		var datetime0 = OS.get_datetime()
+		var filename_datetime0 = String(datetime0.year) +String(datetime0.month) +String(datetime0.day) +String(datetime0.hour) +String(datetime0.minute) +String(datetime0.second)
+		dataString.filename = "BLUFF_dataFile_code_"+global.participCode+"_opponent_"+str(global.iter)+"_"+filename_datetime0+".csv"
+		dataString.filedata = (saveOutput)
+		_make_post_request("/record_result.php", dataString)
 		freshPress = false
 		global.iter += 1
 		get_tree().change_scene("res://Start.tscn")
@@ -294,6 +328,8 @@ func _on_ButtonLeft_pressed():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	timeElapsedSinceGameStart = timeElapsedSinceGameStart + delta
+	timeElapsedSinceLastLog = timeElapsedSinceLastLog + delta
 	if $"ButtonLeft".text == leftButtonText2:
 		timeButton1stFreeze += delta
 		if timeButton1stFreeze > timeButton1stFreezeMax:
@@ -346,7 +382,7 @@ func _on_ButtonLeft_button_down():
 func _on_LeftCardBack_gui_input(event):
 	if event.is_action("lftclk") and $"ButtonLeft".text == leftButtonText3:
 		cardSelectedPos = "left"
-		$"TextInstr".text = "You have seen the cards. Don't worry! This is just a sneak peek, your opponent doesn't know what the cards are. Now you have to decide whether to raise your bet by raising more money or to fold"
+		$"TextInstr".text = "You have seen the cards. Now you have to decide whether to raise your bet by raising more money or to fold"
 		cardChoice()
 
 
@@ -354,7 +390,7 @@ func _on_RightCardBack_gui_input(event):
 	pass
 #	if event.is_action("lftclk") and $"ButtonLeft".text == leftButtonText3:
 #		cardSelectedPos = "right"
-#		$"TextInstr".text = "You have selected the card on the right. Don't worry! This is just a sneak peek, your opponent doesn't know what this card is"
+#		$"TextInstr".text = "You have selected the card on the right."
 #		cardChoice()
 
 

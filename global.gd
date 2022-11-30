@@ -6,6 +6,7 @@ extends Node
 # var b = "text"
 
 var winnings
+var participCode
 
 var iter = 0 # 0 is training 1, 2, 3 are the three opponents
 var raiseProb = [5, 9, 0]

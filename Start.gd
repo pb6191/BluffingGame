@@ -9,14 +9,18 @@ extends Node2D
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if global.iter == 0:
+		$"LineEdit".visible = true
 		$"RichTextLabel".text = """These are training trials.
 
 Please work with your experimenter to understand the rules of the game.
 
 There will be a total of 20 trials.
 
-You can rest anytime you like, get up, walk around, and question the experimenter."""
+You can rest anytime you like, get up, walk around, and question the experimenter.
+
+Enter your code to start the game:"""
 	elif global.iter == 1:
+		$"LineEdit".visible = false
 		$"RichTextLabel".text = """Training ENDS here and now the experiment BEGINS.
  
 You will face opponent #"""+str(global.iter)+""" now.
@@ -29,6 +33,7 @@ If you lose in the Real trial, we won't take money from you.
 
 You can rest anytime you like, get up, walk around, and question the experimenter."""
 	else:
+		$"LineEdit".visible = false
 		$"RichTextLabel".text = """You will face opponent #"""+str(global.iter)+""" now.
 
 There will be a total of 100 trials but only 1 trial is real.
@@ -39,6 +44,7 @@ If you lose in the Real trial, we won't take money from you.
 
 You can rest anytime you like, get up, walk around, and question the experimenter."""
 	if global.iter == 4:
+		$"LineEdit".visible = false
 		$"Button".visible = false
 		if global.winnings > 0.0:
 			$"RichTextLabel".text = """Thank you for participating.
@@ -65,4 +71,6 @@ Therefore, you did not win any bonus."""
 
 
 func _on_Button_pressed():
+	if global.iter == 0:
+		global.participCode = $"LineEdit".text
 	get_tree().change_scene("res://Main.tscn")
