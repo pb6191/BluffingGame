@@ -9,10 +9,10 @@ var rng2 = RandomNumberGenerator.new()
 var rng3 = RandomNumberGenerator.new()
 var rng4 = RandomNumberGenerator.new()
 var rng5 = RandomNumberGenerator.new()
-var oppBet = 30.0
-var oppRaise = 50.0
-var bet = 10.0
-var raise = 50.0
+var oppBet = 15.0
+var oppRaise = 25.0
+var bet = 5.0
+var raise = 25.0
 var money = 0.0
 var moneyStr = "You won from opponent: $"
 var moneyStrOpp = "Opponent won from you: $"
@@ -20,11 +20,11 @@ var trialNum = 1
 var totalTrials = 100
 var freshPress = false
 var freshPressRight = false
-var leftButtonText1 = "Bet $10"
+var leftButtonText1 = "Bet $5"
 var leftButtonText2 = "Waiting for opponent to bet"
 var leftButtonText3 = "DEAL!"
 var leftButtonText3b = "Pick up the cards from the table"
-var leftButtonText4 = "Do you want to raise $50?"
+var leftButtonText4 = "Do you want to raise $25?"
 var rightButtonText4 = "Do you want to fold?"
 var leftButtonText5 = "Waiting for opponent to raise or fold"
 var leftButtonText6 = "Show the cards to the opponent"
@@ -72,7 +72,7 @@ func _ready():
 	elif (global.iter == 1 and (global.oppPicOrder == 5 or global.oppPicOrder == 6)) or (global.iter == 2 and (global.oppPicOrder == 2 or global.oppPicOrder == 4)) or (global.iter == 3 and (global.oppPicOrder == 1 or global.oppPicOrder == 3)):
 		$"OppPic3".visible = true
 	$"ButtonLeft".text = leftButtonText3
-	saveOutput.append("timeStamp,numOpponent,numTrial,timeElapsedSinceGameStart,timeElapsedSinceLastLog,king,winnings")
+	saveOutput.append("timeStamp,numOpponent,numTrial,timeElapsedSinceGameStart,timeElapsedSinceLastLog,joker,winnings")
 	timeElapsedSinceLastLog = 0
 	http_client = HTTPClient.new()
 
@@ -93,14 +93,14 @@ func _make_post_request(url, data_to_send):
 func setNonKing():
 	cardarray.shuffle()
 	carditem = cardarray[0]
-	while "king" in carditem or "ace" in carditem:
+	while "joker" in carditem or "ace" in carditem:
 		cardarray.shuffle()
 		carditem = cardarray[0]
 
 func setKing():
 	cardarray.shuffle()
 	carditem = cardarray[0]
-	while !("king" in carditem):
+	while !("joker" in carditem):
 		cardarray.shuffle()
 		carditem = cardarray[0]
 	var whichONE = [1, 2, 3, 4, 5]
@@ -253,7 +253,7 @@ func _on_ButtonLeft_pressed():
 			opponentDecision = "fold"
 		if cardSelectedVal == "ace":
 			if global.iter == 0:
-				$"TextInstr".text = "You have chosen to up the ante by raising more money. Smart move, you have a King! Now, we are waiting for your opponent to fold or increase their bet"
+				$"TextInstr".text = "You have chosen to up the ante by raising more money. Smart move, you have a Joker! Now, we are waiting for your opponent to fold or increase their bet"
 			else:
 				$"TextInstr".text = "We are waiting for your opponent to fold or increase their bet"
 		else:
@@ -345,7 +345,7 @@ func _process(delta):
 				$"ButtonRight".visible = false
 				if cardSelectedVal == "ace":
 					if global.iter == 0:
-						$"TextInstr".text = "Your opponent decided to increase their bet. You will have to show your cards now. But you have nothing to worry about since you have a King"
+						$"TextInstr".text = "Your opponent decided to increase their bet. You will have to show your cards now. But you have nothing to worry about since you have a Joker"
 					else:
 						$"TextInstr".text = "Your opponent decided to increase their bet. You have to show your cards now"
 				else:
