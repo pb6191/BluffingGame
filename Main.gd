@@ -368,7 +368,7 @@ func _process(delta):
 						$"TextInstr".text = "Your opponent folded. You won $"+str(oppBet)+" from your opponent and you get back your $"+str(bet)+" ante and $"+str(raise)+" raise."
 				else:
 					if global.iter == 0:
-						$"TextInstr".text = "Your opponent decided to fold. Haha! Looks like the bluff worked. You won $"+str(oppBet)+" from your opponent and you get back your $"+str(bet)+" ante and $"+str(raise)+" raise."
+						$"TextInstr".text = "Your opponent decided to fold. Haha! Your opponent knows that you bluffed. Looks like the bluff worked. You won $"+str(oppBet)+" from your opponent and you get back your $"+str(bet)+" ante and $"+str(raise)+" raise."
 					else:
 						$"TextInstr".text = "Your opponent folded. You won $"+str(oppBet)+" from your opponent and you get back your $"+str(bet)+" ante and $"+str(raise)+" raise."
 				$"WINlogo".visible = true
@@ -403,7 +403,7 @@ func _on_ButtonRight_pressed():
 		updateMoney(-bet)
 		if cardSelectedVal == "ace":
 			if global.iter == 0:
-				$"TextInstr".text = "Seems like you just folded despite having an ace. Is that some kind of complex strategy? You lost your $"+str(bet)+" ante."
+				$"TextInstr".text = "Seems like you just folded despite having a Joker. Is that some kind of complex strategy? You lost your $"+str(bet)+" ante."
 			else:
 				$"TextInstr".text = "You folded and showed your cards to the opponent. You lost your $"+str(bet)+" ante."
 			#$"LeftAce".visible = true
@@ -415,7 +415,7 @@ func _on_ButtonRight_pressed():
 			$"C5".visible = true
 		else:
 			if global.iter == 0:
-				$"TextInstr".text = "Seems like you just folded your losing hand. I guess we are not bluffing today, huh? You lost your $"+str(bet)+" ante."
+				$"TextInstr".text = "Seems like you just folded your losing hand. I guess we are not bluffing today, huh? Now, we show your cards to your opponent, they know you bluffed. You lost your $"+str(bet)+" ante."
 			else:
 				$"TextInstr".text = "You folded and showed your cards to the opponent. You lost your $"+str(bet)+" ante."
 			#$"LeftTwoSpades".visible = true
