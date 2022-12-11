@@ -17,7 +17,7 @@ var money = 0.0
 var moneyStr = "You won from opponent: $"
 var moneyStrOpp = "Opponent won from you: $"
 var trialNum = 1
-var totalTrials = 100
+var totalTrials = 60
 var freshPress = false
 var freshPressRight = false
 var leftButtonText1 = "Bet $5"
@@ -169,8 +169,6 @@ func updateMoney(amt):
 	money = amt
 	$"TextAmt".text = moneyStr + str(money)
 	$"TextAmtOpp".text = moneyStrOpp + str(-money)
-	if global.iter == 1 and trialNum == 2 and amt != 0.0:
-		global.winnings = amt
 
 
 func endTrial():
@@ -180,6 +178,8 @@ func endTrial():
 		saveOutput.append(time_return2+","+str(global.iter)+","+str(trialNum)+ "," + str(timeElapsedSinceGameStart) + "," + str(timeElapsedSinceLastLog) + ",yes," + str(money))
 	else:
 		saveOutput.append(time_return2+","+str(global.iter)+","+str(trialNum)+ "," + str(timeElapsedSinceGameStart) + "," + str(timeElapsedSinceLastLog) + ",no," + str(money))
+	if global.iter >= 1:
+		global.winningsArr.append(money)
 	timeElapsedSinceLastLog = 0
 	trialNum += 1
 	if trialNum == totalTrials+1:
@@ -204,7 +204,7 @@ func _on_ButtonLeft_pressed():
 		$"ButtonLeft".disabled = true
 		timeButton1stFreeze = 0.0
 		rng3.randomize()
-		timeButton1stFreezeMax = rng3.randi_range(4,6) # 4 to 6 secs
+		timeButton1stFreezeMax = rng3.randi_range(2,4) # 2 to 4 secs
 		$"TextInstr".text = "We are just waiting for your opponent to place their bet"
 		$"ButtonLeft".text = leftButtonText2
 	if ($"ButtonLeft".text == leftButtonText2 and freshPress == true):
@@ -244,7 +244,7 @@ func _on_ButtonLeft_pressed():
 		$"ButtonLeft".disabled = true
 		timeButton2ndFreeze = 0.0
 		rng4.randomize()
-		timeButton2ndFreezeMax = rng4.randi_range(6,9) # 6 to 9 secs
+		timeButton2ndFreezeMax = rng4.randi_range(4,7) # 4 to 7 secs
 		rng5.randomize()
 		var getZeroOne = rng5.randi_range(1,9)
 		if (getZeroOne) <= opponentRaisingProbOutOf9:

@@ -5,6 +5,11 @@ extends Node2D
 # var a = 2
 # var b = "text"
 
+var rng6 = RandomNumberGenerator.new()
+var rng7 = RandomNumberGenerator.new()
+
+var payoffOpponent
+var payoffTrial
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -44,12 +49,17 @@ If you lose in the Real trial, we won't take money from you.
 
 You can rest anytime you like, get up, walk around, and question the experimenter."""
 	if global.iter == 4:
+		rng6.randomize()
+		payoffOpponent = rng6.randi_range(1,3) # 1 to 3
+		rng7.randomize()
+		payoffTrial = rng7.randi_range(1,60) # 1 to 60
+		global.winnings = global.winningsArr[((payoffOpponent-1)*60) + (payoffTrial - 1)]
 		$"LineEdit".visible = false
 		$"Button".visible = false
 		if global.winnings > 0.0:
 			$"RichTextLabel".text = """Thank you for participating.
 
-Your one Real trial was Opponent #1 Trial #2.
+Your one Real trial was Opponent #"""+str(payoffOpponent)+""" Trial #"""+str(payoffTrial)+""".
  
 You won $"""+str(global.winnings)+"""
 
@@ -59,7 +69,7 @@ Please contact the experimenter to receive your bonus."""
 		if global.winnings < 0.0:
 			$"RichTextLabel".text = """Thank you for participating.
 
-Your one Real trial was Opponent #1 Trial #2.
+Your one Real trial was Opponent #"""+str(payoffOpponent)+""" Trial #"""+str(payoffTrial)+""".
  
 You lost $"""+str(-1 * global.winnings)+"""
 
