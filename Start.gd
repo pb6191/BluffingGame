@@ -71,7 +71,7 @@ Please contact the experimenter to receive your bonus."""
 
 Your one Real trial was Opponent #"""+str(payoffOpponent)+""" Trial #"""+str(payoffTrial)+""".
  
-You lost $"""+str(-1 * global.winnings)+"""
+You won $0.
 
 Therefore, you did not win any bonus."""
 

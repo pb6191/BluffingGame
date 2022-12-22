@@ -14,8 +14,8 @@ var oppRaise = 25.0
 var bet = 5.0
 var raise = 25.0
 var money = 0.0
-var moneyStr = "You won from opponent: $"
-var moneyStrOpp = "Opponent won from you: $"
+var moneyStr = "You won: $"
+var moneyStrOpp = "Opponent won: $"
 var trialNum = 1
 var totalTrials = 60
 var freshPress = false
@@ -167,8 +167,12 @@ func cardChoice():
 
 func updateMoney(amt):
 	money = amt
-	$"TextAmt".text = moneyStr + str(money)
-	$"TextAmtOpp".text = moneyStrOpp + str(-money)
+	if money >= 0.0:
+		$"TextAmt".text = moneyStr + str(money)
+		$"TextAmtOpp".text = moneyStrOpp + str(0.0)
+	else:
+		$"TextAmt".text = moneyStr + str(0.0)
+		$"TextAmtOpp".text = moneyStrOpp + str(-money)
 
 
 func endTrial():
@@ -275,7 +279,7 @@ func _on_ButtonLeft_pressed():
 				$"TextInstr".text = "Congrats, you won $"+str(oppBet)+" ante and $"+str(oppRaise)+" raise from your opponent. You also keep your $"+str(bet)+" ante and your $"+str(raise)+" raise."
 			$"WINlogo".visible = true
 			$"WINPlayer".play()
-			updateMoney(oppBet+oppRaise)
+			updateMoney(oppBet+oppRaise+bet+raise)
 			#$"LeftAce".visible = true
 			#$"Ace".visible = true
 			$"C1".visible = true
@@ -290,7 +294,7 @@ func _on_ButtonLeft_pressed():
 				$"TextInstr".text = "Sorry, you lost your $"+str(bet)+" ante and your $"+str(raise)+" raise."
 			$"LOSElogo".visible = true
 			$"LOSEPlayer".play()
-			updateMoney(-bet-raise)
+			updateMoney(-oppBet-oppRaise-bet-raise)
 			#$"LeftTwoSpades".visible = true
 			#$"TwoSpades".visible = true
 			$"C1".visible = true
@@ -355,7 +359,7 @@ func _process(delta):
 						$"TextInstr".text = "Your opponent decided to increase their bet. You have to show your cards now"
 				$"ButtonLeft".text = leftButtonText6
 			else:
-				updateMoney(oppBet)
+				updateMoney(oppBet+bet+raise)
 				$"OppLeft10".visible = false
 				$"PlayerLeft10".visible = false
 				$"PlayerRight10".visible = false
@@ -400,7 +404,7 @@ func _on_ButtonRight_pressed():
 		$"ButtonRight".visible = false
 		$"PlayerLeft10".visible = false
 		$"OppLeft10".visible = false
-		updateMoney(-bet)
+		updateMoney(-bet-oppBet)
 		if cardSelectedVal == "ace":
 			if global.iter == 0:
 				$"TextInstr".text = "Seems like you just folded despite having a Joker. Is that some kind of complex strategy? You lost your $"+str(bet)+" ante."
